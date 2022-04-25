@@ -12,9 +12,13 @@
   "dependencies": {
     "babel-node": "^0.0.1-security",
     "babel-preset-es2015": "^6.24.1",
-    "express": "^4.17.2",
-    "mongoose": "^6.1.7",
-    "mongoose-paginate-v2": "^1.5.0"
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.9",
+    "mongoose-paginate-v2": "^1.5.0",
+    "randomstring": "^1.2.2",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "dotenv": "^14.2.0",
