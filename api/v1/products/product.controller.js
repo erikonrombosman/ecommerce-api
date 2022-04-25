@@ -36,9 +36,9 @@ exports.deleteProduct = async (req, res) => {
 exports.getProduct = async (req, res) => {
   try {
     const product = await Product.findOne({_id: req.params.id});
-    if (!product) res.status(404).json({error: 'Entity not found'});
 
-    res.status(200).json(product);
+    if (!product) res.status(404).json({error: 'Entity not found'});
+    else if (product) res.status(200).json(product);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -47,12 +47,13 @@ exports.getProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
+    const body = Object.assign({}, req.body);
     const product = await Product.findOneAndUpdate(
-      {_id: req.params.id}, {...req.body},
+      {_id: req.params.id}, body,
     );
     if (!product) res.status(404).json({error: 'Entity not found'});
+    else if(product) res.status(200).json(product);
 
-    res.status(200).json(product);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
