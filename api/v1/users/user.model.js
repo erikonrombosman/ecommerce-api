@@ -28,23 +28,31 @@ UserSchema.plugin(mongoosePaginate);
 
 UserSchema.methods = {
   async encryptPassword(password) {
+    console.log(this);
     if(!this.salt) {
       throw new Error(`Missing password or salt for user ${this.email}`);
     }
 
-    const defaultIterations = 10000;
-    const defaultKeyLength = 64;
+    const defaultIterations = 100;
+    const defaultKeyLength = 16;
     const salt = this.salt;
     return crypto.PBKDF2(password, salt, {keySize: defaultKeyLength, iterations: defaultIterations});
   },
+
   makeSalt(byteSize) {
     console.log({hola: 'hola'});
     const defaultByteSize = 16;
     return randomstring.generate(defaultByteSize);
   },
+
   async authenticate(password) {
-    const encryptedPassword = await this.encryptPassword(password);
+    const encryptedPassword = (await this.encryptPassword(password)).toString(crypto.enc.Hex);
+    console.log(this.password, encryptedPassword);
     return this.password === encryptedPassword;
   },
+
+  userToken(){
+    return {email: this.email, name: this.name, _id: this._id};
+  }
 }
 export default mongoose.model("User", UserSchema);
