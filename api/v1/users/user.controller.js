@@ -1,4 +1,8 @@
 import User from './user.model';
+import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 
 exports.register = async (req, res) => {
@@ -30,7 +34,7 @@ exports.login = async (req, res) => {
     if (!req.body.password || !req.body.email) {
       return res.status(400).json({msg: 'Email y contraseña son requeridos'});
     }
-    const user = await User.findOne({email: req.body.email}, {email: 1, name: 1});
+    const user = await User.findOne({email: req.body.email});
     if (!user) return res.status(404).json({msg: 'Este usuario no existe'});
 
     const isAuth = await user.authenticate(req.body.password);
@@ -38,8 +42,12 @@ exports.login = async (req, res) => {
       return res.status(401).json({msg: 'Credenciales incorrectas'});
     }
 
-
+    const token = jwt.sign(user.userToken(), process.env.JWT_SECRET, {expiresIn: '15m'});
+    const refreshToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '365d'});
+    
+    res.status(200).json({authToken: token, refreshToken});
   } catch (err) {
-
+    console.log(err);
+    res.status(500).json({msg: 'algo malo pasó'});
   }
 }
