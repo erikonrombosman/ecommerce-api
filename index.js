@@ -28,4 +28,4 @@ app.listen(app.get('port'), () => {
   console.log(`hola ${app.get('port')}`)
 });
 
-app.use("/api/v1", require("./routes"));
+require('./routes')(app);
