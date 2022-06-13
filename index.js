@@ -12,13 +12,13 @@ const app = express();
 // Le indicamos a express que usaremos json
 app.use(express.json());
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@appdist.izigz.mongodb.net/?retryWrites=true&w=majority`
 // Se realiza la conección a mongodb
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jtasf.mongodb.net/test`
-console.log(uri);
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jtasf.mongodb.net/ecommerce`
 
 mongoose.connect(uri,
   { useNewUrlParser: true, useUnifiedTopology: true }
-);
+);  
 
 mongoose.connection.on("connected",  () => console.log("Connected!"));
 
@@ -28,5 +28,4 @@ app.listen(app.get('port'), () => {
   console.log(`hola ${app.get('port')}`)
 });
 
-app.use("/products", require("./api/v1/products/index.js"))
-app.use("/users", require("./api/v1/users/index.js"))
+app.use("/api/v1", require("./routes"));
