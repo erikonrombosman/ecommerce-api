@@ -12,13 +12,24 @@ const app = express();
 // Le indicamos a express que usaremos json
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@appdist.izigz.mongodb.net/?retryWrites=true&w=majority`
+let uri;
+console.log(process.env);
+if (process.env.NODE_ENV == 'test' || process.env.NODE_ENV == 'dev'){
+  uri = process.env.MONGODB_URI
+} else {
+  uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jtasf.mongodb.net`
+}
 // Se realiza la conección a mongodb
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jtasf.mongodb.net/ecommerce`
+// uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@appdist.izigz.mongodb.net/?retryWrites=true&w=majority`
 
-mongoose.connect(uri,
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);  
+try {
+  mongoose.connect(uri,
+    { useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }
+  );  
+} catch(err) {
+  console.error(err);
+}
+
 
 mongoose.connection.on("connected",  () => console.log("Connected!"));
 
