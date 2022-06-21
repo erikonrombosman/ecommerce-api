@@ -1,0 +1,27 @@
+{
+  "verbose": true,
+  "testEnvironment": "node",
+  "roots": [
+    "api/v1"
+  ],
+  "testMatch": [
+    "**/?(*).spec.{js,mjs,ts}"
+  ],
+  "moduleFileExtensions": [
+    "js",
+    "mjs",
+    "ts"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 10,
+      "functions": 10,
+      "lines": 10,
+      "statements": 0
+    }
+  },
+  "setupFilesAfterEnv": [
+    "./api/config/test.config.js"
+  ]
+}
+  

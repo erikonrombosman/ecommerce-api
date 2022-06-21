@@ -16,7 +16,7 @@ const ProductSchema = mongoose.Schema({
   timestamps: true,
 });
 
-ProductSchema.index({sku: 1});
+ProductSchema.index({sku: 1}, { unique: true });
 ProductSchema.plugin(mongoosePaginate);
 
 export default mongoose.model("Product", ProductSchema);
