@@ -13,11 +13,11 @@ const app = express();
 app.use(express.json());
 
 let uri;
-console.log(process.env);
 if (process.env.NODE_ENV == 'test' || process.env.NODE_ENV == 'dev'){
   uri = process.env.MONGODB_URI
 } else {
-  uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.jtasf.mongodb.net`
+  const { DB_USER, DB_PASSWORD, DB_CLUSTER } = process.env;
+  uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_CLUSTER}`;
 }
 // Se realiza la conección a mongodb
 // uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@appdist.izigz.mongodb.net/?retryWrites=true&w=majority`

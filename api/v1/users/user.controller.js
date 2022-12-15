@@ -51,3 +51,22 @@ exports.login = async (req, res) => {
     res.status(500).json({msg: 'algo malo pasó'});
   }
 }
+
+exports.refresh = async (req, res) => {
+  console.log(req.body);
+  const { refreshToken } = req.body;
+  try {
+    const verify = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    if (verify) {
+      const user = await User.findOne({_id: verify.id});
+      if (!user) return res.status(404).json({msg: 'Este usuario no existe'});
+
+      const token = jwt.sign(user.userToken(), process.env.JWT_SECRET, {expiresIn: '15m'});
+      const refreshToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '365d'});
+      
+      res.status(200).json({authToken: token, refreshToken});
+    }
+  } catch (err) {
+    return res.status(401).json({msg: 'Token inválido'});
+  }
+}
